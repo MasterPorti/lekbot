@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRe } from "react";
 import Image from "next/image";
 
 export default function Led({
@@ -11,21 +11,14 @@ export default function Led({
   const [isDrawing, setIsDrawing] = useState(false);
   const [lineEnd, setLineEnd] = useState({ x: 0, y: 0 });
   const [lineStart, setLineStart] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
     function handleMouseMove(e) {
       if (isDrawing) {
         setLineEnd({ x: e.clientX, y: e.clientY });
-        console.log("Drawing line from", lineStart, "to", e.clientX, e.clientY);
       }
     }
 
-    function handleClick(e) {
-      if (isDrawing) {
-        setIsDrawing(false);
-        setWireActive(false);
-      }
-    }
+   
 
     function handleKeyDown(e) {
       if (e.key === "Escape") {
@@ -35,18 +28,29 @@ export default function Led({
     }
 
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("click", handleClick);
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("click", handleClick);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isDrawing]);
 
-  function handlePinClick(e) {
+ useEffect(() => {
     if (!wireActive) {
+      setIsDrawing(false);
+    }
+  },[wireActive])
+
+  function handlePinClick(e) {
+
+      if (wireActive) {
+        setWireEnd({ x: e.clientX, y: e.clientY });
+        setIsDrawing(false);
+        setWireActive(false);
+        return;
+      }
+   
       e.stopPropagation();
 
       const rect = e.currentTarget.getBoundingClientRect();
@@ -58,14 +62,8 @@ export default function Led({
       setWireStart({ x: centerX, y: centerY });
       setIsDrawing(true);
       setWireActive(true);
-    }
-    if (wireActive) {
-      e.stopPropagation();
-      setIsDrawing(false);
-      setWireActive(false);
-      setWireEnd({ x: lineEnd.x, y: lineEnd.y });
-      console.log("Wire drawn from", lineStart, "to", lineEnd);
-    }
+
+    
   }
 
   return (

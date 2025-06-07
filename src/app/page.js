@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins } from "next/font/google";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import Header from "../components/Header";
 import CustomCursor from "../components/CustomCursor";
 import Components from "../components/componetButton";
@@ -15,6 +15,8 @@ const poppins = Poppins({
 });
 
 export default function Home() {
+  const canvasRef = useRef(null);
+
   const [customCursor, setCustomCursor] = useState(null);
   const [position, setPosition] = useState({ x: 0, y: 0, type: null });
   const [boxes, setBoxes] = useState([]);
@@ -22,6 +24,7 @@ export default function Home() {
   const [wireStart, setWireStart] = useState({ x: 0, y: 0 });
   const [wireEnd, setWireEnd] = useState({ x: 0, y: 0 });
   const [wires, setWires] = useState([]);
+  const [isDrawing, setIsDrawing] = useState(false);
 
   const handleClick = (e) => {
     if (!customCursor) return;
@@ -31,6 +34,21 @@ export default function Home() {
     setCustomCursor(null); // Reset custom cursor after placing the box
     setBoxes([...boxes, { x, y, type: customCursor }]);
   };
+
+  
+
+ useEffect(() => {
+    if (!wireActive && wireEnd.x !== 0 && wireEnd.y !== 0 && wireStart.x !== 0 && wireStart.y !== 0) {
+    console.log("cable terminado");
+    console.log("wireEnd", wireEnd);
+    console.log("wireStart", wireStart);
+    setWires([...wires, { start: wireStart, end: wireEnd }]);
+    setWireStart({ x: 0, y: 0 });
+    setWireEnd({ x: 0, y: 0 });
+    }
+  },[wireActive, wireEnd, wireStart, wires]);
+
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -55,7 +73,7 @@ export default function Home() {
     <div>
       <Header poppins={poppins} />
       <div className="w-full h-[calc(100vh-50px)] bg-gray-100/50 border-gray-400 border-t-2 flex">
-        <div className="w-[80%] h-full relative" onClick={handleClick}>
+        <div ref={canvasRef} className="w-[80%] h-full relative" onClick={handleClick}>
           {boxes.map((box, index) => {
             if (box.type === "LED") {
               return (
@@ -69,6 +87,8 @@ export default function Home() {
                   setWireStart={setWireStart}
                   wireEnd={wireEnd}
                   setWireEnd={setWireEnd}
+                  isDrawing={isDrawing}
+                  setIsDrawing={setIsDrawing}
                 />
               );
             } else if (box.type === "Batería") {
@@ -85,6 +105,20 @@ export default function Home() {
               return null; // o algún componente por defecto
             }
           })}
+
+           <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+    {wires.map((wire, index) => (
+      <line
+        key={index}
+        x1={wire.start.x}
+        y1={wire.start.y}
+        x2={wire.end.x}
+        y2={wire.end.y}
+        stroke="black"
+        strokeWidth="2"
+      />
+    ))}
+  </svg>
           <CustomCursor customCursor={customCursor} position={position} />
         </div>
         <section className="w-[20%] h-full bg-gray-100 border-l-2 p-3 border-gray-400">
