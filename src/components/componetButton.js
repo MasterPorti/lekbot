@@ -19,7 +19,7 @@ export default function Components({ setCustomCursor, poppins, elementName }) {
         alt="Component"
         width={50}
         height={50}
-        className="object-cover rounded-2xl"
+        className="object-cover "
       />
       <p className={`${poppins.className} text-center font-bold`}>
         {elementName}
