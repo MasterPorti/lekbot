@@ -7,6 +7,7 @@ import CustomCursor from "@/components/CustomCursor";
 import Components from "@/components/componetButton";
 import Led from "@/components/elements/Led";
 import Baterry from "@/components/elements/Battery";
+import Switch from "@/components/elements/Switch";
 import typeElements from "@/app/data/typeElements";
 
 const poppins = Poppins({
@@ -14,7 +15,7 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export default function Home() {
+export default function Dev() {
   const canvasRef = useRef(null);
 
   const [customCursor, setCustomCursor] = useState(null);
@@ -130,6 +131,25 @@ export default function Home() {
                   setColor={setColor}
                 />
               );
+            } else if (box.type === "SWITCH") {
+              return (
+                <Switch
+                  key={index}
+                  position={{ x: box.x, y: box.y }}
+                  wireActive={wireActive}
+                  setWireActive={setWireActive}
+                  setWireStart={setWireStart}
+                  setWireEnd={setWireEnd}
+                  canvasRef={canvasRef}
+                  isDrawing={isDrawing}
+                  setIsDrawing={setIsDrawing}
+                  lineStart={lineStart}
+                  setLineStart={setLineStart}
+                  lineEnd={lineEnd}
+                  setLineEnd={setLineEnd}
+                  setColor={setColor}
+                />
+              );
             } else {
               return null;
             }
@@ -187,6 +207,14 @@ export default function Home() {
               position={position}
               poppins={poppins}
               elementName="Batería"
+            />
+
+            <Components
+              setCustomCursor={setCustomCursor}
+              customCursor={customCursor}
+              position={position}
+              poppins={poppins}
+              elementName="SWITCH"
             />
           </div>
         </section>
