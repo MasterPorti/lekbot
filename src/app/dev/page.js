@@ -1,5 +1,5 @@
 "use client";
-
+import { v4 as uuidv4 } from 'uuid';
 import { Poppins } from "next/font/google";
 import { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header";
@@ -38,8 +38,19 @@ export default function Dev() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     setCustomCursor(null);
-    setBoxes([...boxes, { x, y, type: customCursor }]);
+    if (customCursor == "LED") {
+      setBoxes([...boxes, { id: uuidv4(),x, y, type: customCursor , anode: "", cathode: ""}]);
+    } else if (customCursor == "Batería") {
+      setBoxes([...boxes, { id: uuidv4(),x, y, type: customCursor,  }]);
+    } else if (customCursor == "SWITCH") {
+      setBoxes([...boxes, { id: uuidv4(),x, y, type: customCursor, pin1: "",pin2: "" , pin3: "" }]);
+    }
   };
+
+
+  useEffect(() => {
+    console.log("Boxes:", boxes);
+  }, [boxes]);
 
   useEffect(() => {
     if (
@@ -96,7 +107,7 @@ export default function Dev() {
             if (box.type === "LED") {
               return (
                 <Led
-                  key={index}
+                  key={box.id}
                   position={{ x: box.x, y: box.y }}
                   wireActive={wireActive}
                   setWireActive={setWireActive}
@@ -115,7 +126,7 @@ export default function Dev() {
             } else if (box.type === "Batería") {
               return (
                 <Baterry
-                  key={index}
+                  key={box.id}
                   position={{ x: box.x, y: box.y }}
                   wireActive={wireActive}
                   setWireActive={setWireActive}
@@ -134,7 +145,7 @@ export default function Dev() {
             } else if (box.type === "SWITCH") {
               return (
                 <Switch
-                  key={index}
+                  key={box.id}
                   position={{ x: box.x, y: box.y }}
                   wireActive={wireActive}
                   setWireActive={setWireActive}

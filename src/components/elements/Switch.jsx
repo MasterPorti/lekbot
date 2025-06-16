@@ -80,8 +80,8 @@ export default function Led({
     >
       <Image
         src="/componets/switch.png"
-        width={80}
-        height={80}
+        width={100}
+        height={100}
         alt="LED Component"
         className="object-cover rounded-2xl"
       />
@@ -90,15 +90,23 @@ export default function Led({
           handlePinClick(e);
           setColor("red");
         }}
-        className="w-3.5 h-3.5 bottom-[5px] left-[28px] absolute hover:bg-red-500 hover:border-4 border-black cursor-pointer z-10"
+        className="w-3.5 h-3.5 bottom-[5px] left-[22px] absolute hover:bg-red-500 hover:border-4 border-black cursor-pointer z-10"
       ></div>
       <div
         onClick={(e) => {
           handlePinClick(e);
           setColor("blue");
         }}
-        className="w-3.5 h-3.5 bottom-[5px] left-[55px] absolute hover:bg-blue-500 hover:border-4 border-black cursor-pointer z-10"
+        className="w-3.5 h-3.5 bottom-[5px] left-[42px] absolute hover:bg-blue-500 hover:border-4 border-black cursor-pointer z-10"
       ></div>
+       <div
+        onClick={(e) => {
+          handlePinClick(e);
+          setColor("blue");
+        }}
+        className="w-3.5 h-3.5 bottom-[5px] left-[63px] absolute hover:bg-blue-500 hover:border-4 border-black cursor-pointer z-10"
+      ></div>
+
     </div>
   );
 }

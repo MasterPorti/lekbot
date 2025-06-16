@@ -6,5 +6,5 @@ export default async function Page() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
   const data = await supabase.from("Posts").select("*");
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return <div>{JSON.stringify(data)}</div>;
 }
